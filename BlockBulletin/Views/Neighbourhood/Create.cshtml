@@ -1,0 +1,57 @@
+@model BlockBulletin.ViewModels.NeighbourhoodViewModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "_Layout";
+}
+<style>
+   .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<div class="container">
+     <div class="row ">
+        <div class="col-md-12">
+            <div class="card glass-card">
+                <div class="card-body">
+                    <h1 class="card-title">Create</h1>
+                    <h5>"Discover, Connect, and Thrive in Your Local Neighborhood."</h5>
+                    <hr />
+                    <form id="neighbourhoodForm" method="post" action="@Url.Action("Create", "Neighbourhood")">
+                       <div asp-validation-summary="All" class="text-danger"></div>
+                       <div class="form-group">
+                           <label asp-for="Name"></label>
+                           <input asp-for="Name" class="form-control" />
+                           <span asp-validation-for="Name" class="text-danger"></span>
+                       </div>
+
+                       <div class="form-group">
+                           <label asp-for="Location"></label>
+                           <input asp-for="Location" class="form-control" />
+                           <span asp-validation-for="Location" class="text-danger"></span>
+                       </div>
+
+                       <div class="form-group">
+                           <label asp-for="Hospital"></label>
+                           <input asp-for="Hospital" class="form-control" />
+                           <span asp-validation-for="Hospital" class="text-danger"></span>
+                       </div>
+
+                       <div class="form-group">
+                           <label asp-for="Police"></label>
+                           <input asp-for="Police" class="form-control" />
+                           <span asp-validation-for="Police" class="text-danger"></span>
+                       </div>
+
+                       <div class="modal-footer">
+                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                           <button type="submit" class="btn btn-primary">Create</button>
+                       </div>
+                   </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

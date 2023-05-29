@@ -1,0 +1,68 @@
+@model List<Application.DTOs.NeighbourhoodDTO>
+
+@{
+    ViewBag.Title = "Neighbourhoods";
+    Layout = "_Layout";
+}
+<div class="container">
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-6">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search by location" id="searchInput">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" id="searchButton">Search</button>
+                </div> 
+                <a class="text-white m-lg-2" asp-controller="Neighbourhood" asp-action="Create"><i>Can't find your location? Create Here </i></a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+       @foreach (var neighborhood in Model)
+               {
+                   <div class="col-md-4 mb-4">
+                       <div class="card">
+                           <div class="card-body">
+                               <div class="d-flex align-items-center justify-content-between">
+                                   <h6 class="card-title">@neighborhood.Name</h6>
+                                    <a  class="btn btn-primary" asp-area="" asp-controller="Neighbourhood" asp-action="JoinNeighbourhood" asp-route-id="@neighborhood.Id">Join</a>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               }
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var availableNeighborhoods = [
+                @foreach (var neighborhood in Model)
+                {
+                    @: "@neighborhood.Name",
+                }
+            ];
+
+            $('#searchInput').autocomplete({
+                source: availableNeighborhoods,
+                minLength: 1 
+            });
+
+            $('#searchButton').click(function () {
+                var searchTerm = $('#searchInput').val().toLowerCase();
+                $('.card').each(function () {
+                    var neighborhoodName = $(this).find('.card-title').text().toLowerCase();
+                    if (neighborhoodName.includes(searchTerm)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+

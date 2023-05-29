@@ -1,0 +1,175 @@
+
+@model Application.DTOs.NeighbourhoodDTO
+
+@{
+    ViewBag.Title = "Neighbourhood";
+    Layout = "_Layout";
+}
+
+<!-- Neighbourhood details card -->
+<div class="card glass-card mb-3">
+    <!-- Card header -->
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title">@Model.Name, @Model.Location</h5>
+            <a  class="btn btn-danger" asp-area="" asp-controller="Neighbourhood" asp-action="LeaveNeighbourhood" asp-route-id="@Model.Id">Leave</a>
+        </div>
+    </div>
+
+    <!-- Card body -->
+    <div class="card-body">
+       <div class="d-flex justify-content-between align-items-center">
+        <div class="form-group">
+           <i class="bi bi-hospital"></i> <label>Hospital:</label>
+             <p>@Model.Hospital</p>
+           <i class="bi bi-hospital"></i> <label>Police:</label>
+            <p>@Model.Police</p>
+        </div>
+        
+        <div class="form-group">
+            <label>Created Date:</label>
+            <p>@Model.CreatedAt</p>
+            <label>Members:</label>
+            <p>1000</p>
+            </div>
+       </div>
+    </div>
+
+</div>
+<div class="card glass-card">
+    <div class="container mt-3 mb-3">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="business-tab" data-toggle="tab" href="#business" role="tab" aria-controls="business" aria-selected="true">Businesses</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="posts-tab" data-toggle="tab" href="#posts" role="tab" aria-controls="posts" aria-selected="false">Posts</a>
+            </li>
+        </ul>
+        
+        <div class="tab-content mt-3" id="myTabContent">
+            <div class="tab-pane fade show active" id="business" role="tabpanel" aria-labelledby="business-tab">
+                   <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Search Business in your area" id="searchInput">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button" id="searchButton">Search Business</button>
+                        </div>
+                    </div>
+                
+                <button id="createBusinessBtn"class="btn btn-primary mt-3" >Add A Business</button>
+                <div class="row mt-3">
+                    @foreach (var business in Model.Businesses)
+                    {
+                        <div class="col-md-4">
+                            <div class="card mt-3" style="width: 100%;">
+                                <div class="card-body">
+                                    <h5 class="card-title">@business.Title</h5>
+                                    <p class="card-text">@business.Description</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                
+            </div>
+            <div class="tab-pane fade" id="posts" role="tabpanel" aria-labelledby="posts-tab">
+                <form id="createPost" method="post" action="@Url.Action("Create", "Post")">
+                    <input type="hidden" name="neighbourhoodId" value="@Model.Id" />
+                    <div class="form-group mt-3">
+                        <input type="text" class="form-control" id="postTitle" name="title" placeholder="Title" required>
+                        <textarea class="form-control" name="description" placeholder="Inform your neighbours..." required></textarea>
+                    </div>
+                    <button type="submit" form="createPost" class="btn btn-primary mt-3">Create Post</button>
+                </form>
+                
+                <div class="row mt-3">
+                    @foreach (var post in Model.Posts)
+                    {
+                        <div class="col-md-4">
+                            <div class="card mt-3" style="width: 100%;">
+                                <div class="card-body">
+                                    <h5 class="card-title">@post.Title</h5>
+                                    <p class="card-text">@post.Description</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal fade" id="createBusinessModal" tabindex="-1" role="dialog" aria-labelledby="createBusinessModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createBusinessModalLabel">Add A Business</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="createBusinessForm" method="post" action="@Url.Action("Create", "Business")">
+                     <input type="hidden" name="neighbourhoodId" value="@Model.Id" />
+                    <div class="form-group">
+                        <label for="businessName">Business Name:</label>
+                        <input type="text" class="form-control" id="businessName" name="title" placeholder="Enter the business name" required>
+                    </div>
+
+                     <div class="form-group">
+                        <label for="businessDescription">Business Description:</label>
+                        <textarea class="form-control" id="businessDescription" name="description" placeholder="Enter a description for the business" rows="3" required></textarea>
+                    </div>
+                </form>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" form="createBusinessForm" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var business = [
+            @foreach (var business in Model.Businesses)
+            {
+                @: "@business.Title",
+            }
+        ];
+
+        $('#searchInput').autocomplete({
+            source: business,
+            minLength: 1 
+        });
+
+        $('#searchButton').click(function () {
+            var searchTerm = $('#searchInput').val().toLowerCase();
+            $('.card').each(function () {
+                var businessName = $(this).find('.card-title').text().toLowerCase();
+                if (businessName.includes(searchTerm)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+                        
+            $('#myTab a').on('click', function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+            });
+
+            $('#createBusinessBtn').on('click', function () {
+                $('#createBusinessModal').modal('show');
+            });
+        });
+        
+        
+    </script>
+}
+

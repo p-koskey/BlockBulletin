@@ -1,0 +1,53 @@
+@model BlockBulletin.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+    Layout = "_Layout";
+}
+
+<style>
+    body, html {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<div class="container">
+     <div class="row ">
+        <div class="col-md-12">
+            <div class="card glass-card">
+                <div class="card-body">
+                    <h1 class="card-title">Join Block Bulletin</h1>
+                    <h5>"Discover, Connect, and Thrive in Your Local Neighborhood."</h5>
+                    <hr />
+                     <form method="post">
+                               <div asp-validation-summary="All" class="text-danger"></div>
+                               <div class="form-group mb-3">
+                                   <label asp-for="Email"></label>
+                                   <input asp-for="Email" class="form-control" />
+                                   <span asp-validation-for="Email" class="text-danger"></span>
+                               </div>
+                   
+                               <div class="form-group mb-3">
+                                   <label asp-for="Password"></label>
+                                   <input asp-for="Password" class="form-control" />
+                                   <span asp-validation-for="Password" class="text-danger"></span>
+                               </div>
+                   
+                               <div class="form-group mb-3">
+                                   <label asp-for="ConfirmPassword"></label>
+                                   <input asp-for="ConfirmPassword" class="form-control" />
+                                   <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                               </div>
+                             <div class="form-group">
+                                 <div class="d-flex justify-content-between align-items-center">
+                                     <button type="submit" class="btn btn-primary">Register</button>
+                                     <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Back To Login</a>
+                                 </div>
+                             </div>
+                         </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
