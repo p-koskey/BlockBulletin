@@ -75,7 +75,8 @@ public class NeighbourhoodController : Controller
             Hospital = neighbourhood.Hospital,
             Police = neighbourhood.Police,
             Businesses = businesses,
-            Posts = posts
+            Posts = posts,
+            CreatedAt = neighbourhood.CreatedAt
         };
 
         return View(neighbourhoodDTO);
